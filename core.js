@@ -1,32 +1,20 @@
-function counter(state, action) {
+function greeter(state, action) {
   if (typeof state === 'undefined') {
-    return 0
+    return 'World';
   }
 
-  switch (action.type) {
-    case 'INCREMENT':
-      return state + 1;
-    case 'DECREMENT':
-      return state - 1;
-    default:
-      return state
-  }
+  return action.name;
 }
 
-var store = Redux.createStore(counter);
-var valueEl = document.getElementById('value');
+var store = Redux.createStore(greeter);
 
 function render() {
-  valueEl.innerHTML = store.getState().toString()
+  $('#output').html(store.getState().toString());
 }
 
 render();
 store.subscribe(render);
 
-$('#increment').click(function () {
-  store.dispatch({ type: 'INCREMENT' })
-});
-
-$('#decrement').click(function () {
-  store.dispatch({ type: 'DECREMENT' })
+$('#input').change(function () {
+  store.dispatch({ type: 'RESET', name: $(this).val()});
 });
