@@ -1,3 +1,5 @@
+var ReduxUndo = window.ReduxUndo.default;
+
 function greeter(state, action) {
   if (typeof state === 'undefined') {
     return 'World';
