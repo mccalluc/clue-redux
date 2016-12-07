@@ -1,2 +1,5 @@
 # clue-redux
-Experimenting with off-the-shelf-compnent to make something like CLUE
+Experimenting with off-the-shelf-components to make something like CLUE
+
+[demo](https://mccalluc.github.io/clue-redux)
+
