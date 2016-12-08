@@ -1,33 +1,33 @@
 function reducer(state, action) {
   if (typeof state === 'undefined') {
     var name = 'World';
-    return {name: name, history: [name], future: []};
+    return Immutable.Map({
+      name: name,
+      history: Immutable.Stack([name]),
+      future: Immutable.Stack([])
+    });
   }
 
   switch (action.type) {
     case 'RESET':
-      var new_history = state.history.slice();
-      new_history.push(action.name);
       return {
         name: action.name,
-        history: new_history,
+        history: state.history.push(action.name),
         future: []
       };
     case 'UNDO':
-      var new_history = state.history.slice();
-      var new_future = state.future.slice();
-      new_future.unshift(new_history.pop());
+      var new_future = state.future.push(state.history.peek());
+      var new_history = state.history.pop();
       return {
-        name: new_history[new_history.length - 1],
+        name: new_history.peek(),
         history: new_history,
         future: new_future
       };
     case 'REDO':
-      var new_history = state.history.slice();
-      var new_future = state.future.slice();
-      new_history.push(new_future.shift());
+      var new_history = state.history.push(state.future.peek());
+      var new_future = state.future.pop();
       return {
-        name: new_history[new_history.length - 1],
+        name: new_history.peek(),
         history: new_history,
         future: new_future
       };
@@ -43,8 +43,8 @@ function render() {
   var name = state.name;
   $('#input').val(name);
   $('#output').html(name);
-  $('#undo').prop('disabled', state.history.length == 1);
-  $('#redo').prop('disabled', state.future.length == 0);
+  $('#undo').prop('disabled', state.history.size == 1);
+  $('#redo').prop('disabled', state.future.size == 0);
 }
 
 render();
